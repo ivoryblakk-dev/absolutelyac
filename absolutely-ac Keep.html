@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absolutely AC — South Florida's Chillest HVAC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Bungee&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hot-pink: #ff2d95;
+    --cyan: #00e8ff;
+    --sunset: #ff6b35;
+    --purple: #9d2eff;
+    --deep: #14002e;
+    --cream: #fff4e6;
+    --gold: #ffd400;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--deep);
+    color: var(--cream);
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  /* ====== NAV ====== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(20, 0, 46, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--hot-pink);
+  }
+  .logo {
+    font-family: 'Monoton', cursive;
+    font-size: 1.8rem;
+    color: var(--cyan);
+    text-shadow: 2px 2px 0 var(--hot-pink);
+    letter-spacing: 2px;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-phone {
+    background: var(--gold);
+    color: var(--deep);
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 900;
+    text-decoration: none;
+    font-size: 0.9rem;
+    box-shadow: 4px 4px 0 var(--hot-pink);
+    transition: transform 0.15s;
+  }
+  .nav-phone:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--hot-pink); }
+
+  /* ====== HERO ====== */
+  .hero {
+    min-height: 100vh;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 110%, var(--gold) 0%, var(--sunset) 15%, var(--hot-pink) 35%, var(--purple) 65%, var(--deep) 100%);
+    overflow: hidden;
+  }
+
+  /* Neon sun */
+  .sun {
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--sunset) 60%, var(--hot-pink) 100%);
+    box-shadow: 0 0 80px var(--sunset), 0 0 160px var(--hot-pink);
+    z-index: 1;
+  }
+  .sun::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70%;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 12px,
+      var(--deep) 12px,
+      var(--deep) 18px
+    );
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  }
+
+  /* Retro grid */
+  .grid-floor {
+    position: absolute;
+    bottom: 0;
+    left: -10%;
+    right: -10%;
+    height: 35%;
+    background:
+      linear-gradient(to top, var(--hot-pink) 0%, transparent 100%),
+      linear-gradient(to right, var(--cyan) 1px, transparent 1px),
+      linear-gradient(to top, var(--cyan) 2px, transparent 2px);
+    background-size: 100% 100%, 60px 100%, 100% 40px;
+    transform: perspective(400px) rotateX(60deg);
+    transform-origin: bottom;
+    opacity: 0.7;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .hero-text {
+    text-align: left;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--deep);
+    color: var(--gold);
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    border: 2px solid var(--gold);
+  }
+  h1 {
+    font-family: 'Monoton', cursive;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    color: var(--cream);
+    text-shadow:
+      4px 4px 0 var(--hot-pink),
+      8px 8px 0 var(--cyan),
+      12px 12px 30px rgba(0,0,0,0.4);
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+  }
+  .hero-sub {
+    font-size: 1.2rem;
+    max-width: 480px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary, .btn-secondary {
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.9rem;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--deep);
+    box-shadow: 6px 6px 0 var(--cyan);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--cream);
+    border: 3px solid var(--cyan);
+    box-shadow: 6px 6px 0 var(--hot-pink);
+  }
+  .btn-primary:hover, .btn-secondary:hover {
+    transform: translate(-3px, -3px);
+  }
+
+  /* ====== CHARACTERS ====== */
+  .characters {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1rem;
+    position: relative;
+    z-index: 6;
+  }
+  .bear-wrap, .penguin-wrap {
+    width: 220px;
+    height: 280px;
+    position: relative;
+  }
+  .bear { animation: bearDance 1.2s infinite ease-in-out; transform-origin: center bottom; }
+  .penguin { animation: penguinDance 1.2s infinite ease-in-out 0.6s; transform-origin: center bottom; }
+
+  @keyframes bearDance {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    25% { transform: translateY(-18px) rotate(4deg); }
+    50% { transform: translateY(0) rotate(-2deg); }
+    75% { transform: translateY(-12px) rotate(6deg); }
+  }
+  @keyframes penguinDance {
+    0%, 100% { transform: translateY(0) rotate(4deg); }
+    25% { transform: translateY(-15px) rotate(-4deg); }
+    50% { transform: translateY(0) rotate(2deg); }
+    75% { transform: translateY(-20px) rotate(-6deg); }
+  }
+  @keyframes armWaveLeft {
+    from { transform: rotate(-25deg); }
+    to { transform: rotate(15deg); }
+  }
+  @keyframes armWaveRight {
+    from { transform: rotate(25deg); }
+    to { transform: rotate(-15deg); }
+  }
+  .bear-arm-left, .penguin-flipper-left {
+    transform-origin: 50% 20%;
+    animation: armWaveLeft 0.6s infinite alternate ease-in-out;
+  }
+  .bear-arm-right, .penguin-flipper-right {
+    transform-origin: 50% 20%;
+    animation: armWaveRight 0.6s infinite alternate ease-in-out;
+  }
+
+  /* Snow flurries */
+  .snow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .flake {
+    position: absolute;
+    color: white;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+  }
+
+  /* ====== SECTIONS ====== */
+  section { padding: 6rem 3rem; }
+
+  .section-title {
+    font-family: 'Monoton', cursive;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--cream);
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 0 var(--hot-pink), 6px 6px 0 var(--cyan);
+  }
+  .section-sub {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 4rem;
+    font-size: 1.1rem;
+    opacity: 0.85;
+  }
+
+  /* Services */
+  .services {
+    background:
+      linear-gradient(180deg, var(--deep) 0%, #2d0857 100%);
+    position: relative;
+  }
+  .services::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(to right, var(--hot-pink) 0 30px, var(--cyan) 30px 60px, var(--gold) 60px 90px);
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .service-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid var(--cyan);
+    border-radius: 24px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  .service-card:hover {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 0 15px 0 var(--hot-pink);
+    border-color: var(--gold);
+  }
+  .service-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .service-card h3 {
+    font-family: 'Bungee', cursive;
+    color: var(--gold);
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+  }
+  .service-card p { font-size: 0.95rem; opacity: 0.9; }
+
+  /* Why us */
+  .why {
+    background: linear-gradient(180deg, #2d0857 0%, var(--hot-pink) 100%);
+    position: relative;
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .why-card {
+    background: var(--deep);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    border: 3px solid var(--gold);
+    box-shadow: 8px 8px 0 var(--cyan);
+  }
+  .big-num {
+    font-family: 'Monoton', cursive;
+    font-size: 4rem;
+    color: var(--gold);
+    text-shadow: 3px 3px 0 var(--hot-pink);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .why-card h4 {
+    font-family: 'Bungee', cursive;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  .why-card p { font-size: 0.9rem; opacity: 0.85; }
+
+  /* Testimonials */
+  .testimonials {
+    background: var(--deep);
+  }
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .testimonial {
+    background: linear-gradient(135deg, var(--hot-pink) 0%, var(--purple) 100%);
+    padding: 2rem;
+    border-radius: 24px;
+    position: relative;
+    box-shadow: 10px 10px 0 var(--cyan);
+  }
+  .testimonial::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    font-family: 'Monoton';
+    font-size: 6rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .testimonial p {
+    font-style: italic;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  .testimonial .who {
+    font-weight: 900;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+  .stars { color: var(--gold); margin-bottom: 0.5rem; }
+
+  /* CTA */
+  .cta {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--sunset) 50%, var(--hot-pink) 100%);
+    text-align: center;
+    color: var(--deep);
+    padding: 5rem 3rem;
+  }
+  .cta h2 {
+    font-family: 'Monoton', cursive;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--deep);
+    text-shadow: 4px 4px 0 var(--cyan), 8px 8px 0 var(--cream);
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+  }
+  .cta-phone {
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    background: var(--deep);
+    color: var(--gold);
+    padding: 1rem 2.5rem;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 8px 8px 0 var(--cream), 16px 16px 0 var(--cyan);
+    transition: transform 0.15s;
+    letter-spacing: 2px;
+  }
+  .cta-phone:hover { transform: translate(-4px, -4px); }
+  .cta-note {
+    margin-top: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--deep);
+    padding: 3rem;
+    text-align: center;
+    border-top: 4px solid var(--hot-pink);
+  }
+  footer p { opacity: 0.6; font-size: 0.9rem; }
+  footer .logo { display: inline-block; margin-bottom: 1rem; }
+
+  /* ====== BRAND LOGO IN NAV ====== */
+  .brand-logo {
+    display: block;
+    line-height: 0;
+  }
+  .brand-logo img {
+    height: 56px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(255, 45, 149, 0.4));
+    transition: transform 0.2s;
+  }
+  .brand-logo:hover img { transform: scale(1.04); }
+
+  /* ====== BRAND FEATURE (logo above services) ====== */
+  .brand-feature {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .brand-feature::before,
+  .brand-feature::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 25%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--hot-pink), var(--cyan), transparent);
+  }
+  .brand-feature::before { left: 5%; }
+  .brand-feature::after { right: 5%; background: linear-gradient(90deg, transparent, var(--cyan), var(--hot-pink), transparent); }
+  .brand-feature-img {
+    max-width: 360px;
+    width: 100%;
+    height: auto;
+    filter:
+      drop-shadow(0 0 24px rgba(255, 45, 149, 0.4))
+      drop-shadow(0 0 12px rgba(0, 232, 255, 0.35));
+    position: relative;
+    z-index: 2;
+    animation: brandFloat 4s ease-in-out infinite;
+  }
+  @keyframes brandFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ====== FLOATING CONTACT BUTTONS ====== */
+  .floating-cta {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .floating-cta.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .float-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.3rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    box-shadow: 4px 4px 0 var(--deep), 0 6px 20px rgba(0, 0, 0, 0.45);
+    border: 2px solid var(--deep);
+    transition: transform 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+  }
+  .float-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--deep), 0 10px 26px rgba(0, 0, 0, 0.55);
+  }
+  .float-btn-call {
+    background: var(--gold);
+    color: var(--deep);
+    animation: callPulse 2.4s infinite ease-in-out;
+  }
+  .float-btn-email {
+    background: var(--cyan);
+    color: var(--deep);
+  }
+  .float-btn-book {
+    background: var(--hot-pink);
+    color: var(--cream);
+  }
+  .float-icon { font-size: 1.1rem; }
+  @keyframes callPulse {
+    0%, 100% { box-shadow: 4px 4px 0 var(--deep), 0 6px 20px rgba(0, 0, 0, 0.45); }
+    50% { box-shadow: 4px 4px 0 var(--deep), 0 6px 30px rgba(255, 212, 0, 0.7); }
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-links { display: none; }
+    .brand-logo img { height: 44px; }
+    .brand-feature-img { max-width: 240px; }
+    .brand-feature::before, .brand-feature::after { display: none; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero-content { grid-template-columns: 1fr; text-align: center; }
+    .hero-text { text-align: center; }
+    .hero-buttons { justify-content: center; }
+    .characters { gap: 0; }
+    .bear-wrap, .penguin-wrap { width: 160px; height: 200px; }
+    section { padding: 4rem 1.5rem; }
+    .sun { width: 240px; height: 240px; }
+
+    /* Floating buttons collapse to round icon-only on phones */
+    .floating-cta {
+      bottom: 1rem;
+      right: 1rem;
+      gap: 0.6rem;
+    }
+    .float-btn {
+      width: 54px;
+      height: 54px;
+      padding: 0;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .float-btn .float-label { display: none; }
+    .float-icon { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="brand-logo"><img src="absolutely-logo.png" alt="Absolutely AC Services"></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:5551234567" class="nav-phone">📞 (555) 123-COOL</a>
+</nav>
+
+<section class="hero">
+  <div class="snow">
+    <span class="flake" style="left:5%; animation-duration: 8s; animation-delay: 0s;">❄</span>
+    <span class="flake" style="left:15%; animation-duration: 10s; animation-delay: 2s;">❅</span>
+    <span class="flake" style="left:30%; animation-duration: 7s; animation-delay: 4s;">❄</span>
+    <span class="flake" style="left:48%; animation-duration: 9s; animation-delay: 1s;">❆</span>
+    <span class="flake" style="left:65%; animation-duration: 11s; animation-delay: 3s;">❄</span>
+    <span class="flake" style="left:80%; animation-duration: 8s; animation-delay: 5s;">❅</span>
+    <span class="flake" style="left:92%; animation-duration: 10s; animation-delay: 2s;">❆</span>
+  </div>
+
+  <div class="grid-floor"></div>
+  <div class="sun"></div>
+
+  <div class="hero-content">
+    <div class="hero-text">
+      <span class="eyebrow">⚡ Miami's Chillest HVAC ⚡</span>
+      <h1>Stay Cool<br>Stay Iced</h1>
+      <p class="hero-sub">From Boca to Brickell, we keep South Florida cooler than a polar bear's freezer. 24/7 AC repair, installation, and tune-ups.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary">Book Service →</a>
+        <a href="tel:5551234567" class="btn-secondary">Call Now</a>
+      </div>
+    </div>
+
+    <div class="characters">
+      <!-- POLAR BEAR -->
+      <div class="bear-wrap">
+        <svg class="bear" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- shadow -->
+          <ellipse cx="100" cy="265" rx="60" ry="8" fill="rgba(0,0,0,0.3)"/>
+          <!-- legs -->
+          <ellipse cx="75" cy="245" rx="18" ry="22" fill="#ffffff"/>
+          <ellipse cx="125" cy="245" rx="18" ry="22" fill="#ffffff"/>
+          <ellipse cx="75" cy="258" rx="14" ry="6" fill="#1a1a1a"/>
+          <ellipse cx="125" cy="258" rx="14" ry="6" fill="#1a1a1a"/>
+          <!-- body -->
+          <ellipse cx="100" cy="180" rx="60" ry="65" fill="#ffffff"/>
+          <!-- belly -->
+          <ellipse cx="100" cy="195" rx="35" ry="40" fill="#f0e8d8"/>
+          <!-- left arm -->
+          <g class="bear-arm-left">
+            <ellipse cx="40" cy="170" rx="16" ry="40" fill="#ffffff"/>
+            <circle cx="40" cy="205" r="14" fill="#ffffff"/>
+          </g>
+          <!-- right arm -->
+          <g class="bear-arm-right">
+            <ellipse cx="160" cy="170" rx="16" ry="40" fill="#ffffff"/>
+            <circle cx="160" cy="205" r="14" fill="#ffffff"/>
+          </g>
+          <!-- head -->
+          <circle cx="100" cy="85" r="55" fill="#ffffff"/>
+          <!-- ears -->
+          <circle cx="58" cy="45" r="16" fill="#ffffff"/>
+          <circle cx="142" cy="45" r="16" fill="#ffffff"/>
+          <circle cx="58" cy="48" r="9" fill="#ffb3d9"/>
+          <circle cx="142" cy="48" r="9" fill="#ffb3d9"/>
+          <!-- sunglasses -->
+          <rect x="58" y="72" width="84" height="22" rx="11" fill="#14002e"/>
+          <rect x="60" y="74" width="36" height="18" rx="9" fill="#ff2d95"/>
+          <rect x="104" y="74" width="36" height="18" rx="9" fill="#00e8ff"/>
+          <rect x="93" y="80" width="14" height="3" fill="#14002e"/>
+          <!-- shine on glasses -->
+          <ellipse cx="72" cy="79" rx="6" ry="3" fill="#ffffff" opacity="0.7"/>
+          <ellipse cx="116" cy="79" rx="6" ry="3" fill="#ffffff" opacity="0.7"/>
+          <!-- snout -->
+          <ellipse cx="100" cy="110" rx="22" ry="18" fill="#f0e8d8"/>
+          <!-- nose -->
+          <ellipse cx="100" cy="103" rx="9" ry="6" fill="#14002e"/>
+          <!-- mouth -->
+          <path d="M 100 112 Q 95 122 88 118" stroke="#14002e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 100 112 Q 105 122 112 118" stroke="#14002e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- PENGUIN -->
+      <div class="penguin-wrap">
+        <svg class="penguin" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- shadow -->
+          <ellipse cx="100" cy="265" rx="55" ry="7" fill="rgba(0,0,0,0.3)"/>
+          <!-- feet -->
+          <ellipse cx="78" cy="255" rx="22" ry="10" fill="#ffa500"/>
+          <ellipse cx="122" cy="255" rx="22" ry="10" fill="#ffa500"/>
+          <path d="M 60 257 L 65 250 M 70 258 L 75 250 M 80 258 L 85 250" stroke="#cc7700" stroke-width="1.5"/>
+          <path d="M 110 257 L 115 250 M 120 258 L 125 250 M 130 258 L 135 250" stroke="#cc7700" stroke-width="1.5"/>
+          <!-- body black -->
+          <ellipse cx="100" cy="170" rx="65" ry="85" fill="#1a1a1a"/>
+          <!-- white belly -->
+          <ellipse cx="100" cy="180" rx="45" ry="70" fill="#ffffff"/>
+          <!-- left flipper -->
+          <g class="penguin-flipper-left">
+            <ellipse cx="35" cy="170" rx="14" ry="48" fill="#1a1a1a"/>
+          </g>
+          <!-- right flipper -->
+          <g class="penguin-flipper-right">
+            <ellipse cx="165" cy="170" rx="14" ry="48" fill="#1a1a1a"/>
+          </g>
+          <!-- head -->
+          <ellipse cx="100" cy="85" rx="50" ry="55" fill="#1a1a1a"/>
+          <!-- white face -->
+          <ellipse cx="100" cy="95" rx="33" ry="36" fill="#ffffff"/>
+          <!-- sunglasses -->
+          <rect x="65" y="75" width="70" height="20" rx="10" fill="#14002e"/>
+          <rect x="67" y="77" width="30" height="16" rx="8" fill="#ffd400"/>
+          <rect x="103" y="77" width="30" height="16" rx="8" fill="#00e8ff"/>
+          <rect x="95" y="82" width="10" height="3" fill="#14002e"/>
+          <!-- shine -->
+          <ellipse cx="78" cy="81" rx="5" ry="2.5" fill="#ffffff" opacity="0.7"/>
+          <ellipse cx="114" cy="81" rx="5" ry="2.5" fill="#ffffff" opacity="0.7"/>
+          <!-- beak -->
+          <path d="M 90 102 L 110 102 L 100 122 Z" fill="#ffa500"/>
+          <line x1="90" y1="112" x2="110" y2="112" stroke="#cc7700" stroke-width="1.5"/>
+          <!-- cheek blush -->
+          <circle cx="72" cy="108" r="6" fill="#ff6b9d" opacity="0.5"/>
+          <circle cx="128" cy="108" r="6" fill="#ff6b9d" opacity="0.5"/>
+          <!-- bowtie! -->
+          <path d="M 80 135 L 100 145 L 80 155 Z" fill="#ff2d95"/>
+          <path d="M 120 135 L 100 145 L 120 155 Z" fill="#ff2d95"/>
+          <circle cx="100" cy="145" r="5" fill="#ffd400"/>
+        </svg>
+      </div>
+    </div>
+
+    <div></div>
+  </div>
+</section>
+
+<section id="services" class="services">
+  <div class="brand-feature">
+    <img src="absolutely-logo.png" alt="Absolutely AC Services" class="brand-feature-img">
+  </div>
+  <h2 class="section-title">Our Services</h2>
+  <p class="section-sub">Whatever your AC is doing — wheezing, dripping, or flat-out ghosting you — we've got the fix.</p>
+  <div class="service-grid">
+    <div class="service-card">
+      <div class="service-icon">🛠️</div>
+      <h3>AC Repair</h3>
+      <p>Broken at midnight in August? Our techs are on call 24/7 with same-day service across Miami-Dade and Broward.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">❄️</div>
+      <h3>New Installation</h3>
+      <p>Upgrade to a high-efficiency unit. Lower bills, quieter operation, and energy ratings that'd make a polar bear proud.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3>Maintenance Plans</h3>
+      <p>Two tune-ups a year, priority service, and 15% off repairs. Keep your system humming through every hurricane season.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💨</div>
+      <h3>Duct Cleaning</h3>
+      <p>Florida humidity loves mold. We don't. Full duct inspection and cleaning to keep your air breathable.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3>Commercial HVAC</h3>
+      <p>Restaurants, offices, retail — we keep your customers and staff cool so you can focus on the business.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌡️</div>
+      <h3>Smart Thermostats</h3>
+      <p>Control your AC from the beach. We install and configure Nest, Ecobee, and Honeywell systems.</p>
+    </div>
+  </div>
+</section>
+
+<section id="why" class="why">
+  <h2 class="section-title">Why Absolutely AC?</h2>
+  <p class="section-sub">Because hot houses are uncool, and we've been the chillest in town since '08.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="big-num">17</div>
+      <h4>Years Cooling</h4>
+      <p>Serving South Florida since 2008</p>
+    </div>
+    <div class="why-card">
+      <div class="big-num">24/7</div>
+      <h4>Emergency Service</h4>
+      <p>Real humans answer the phone</p>
+    </div>
+    <div class="why-card">
+      <div class="big-num">5★</div>
+      <h4>Rated</h4>
+      <p>2,400+ reviews and counting</p>
+    </div>
+    <div class="why-card">
+      <div class="big-num">$0</div>
+      <h4>Trip Charges</h4>
+      <p>Free estimates, always</p>
+    </div>
+  </div>
+</section>
+
+<section id="reviews" class="testimonials">
+  <h2 class="section-title">Cool Reviews</h2>
+  <p class="section-sub">Don't take our word for it. Take theirs.</p>
+  <div class="testimonial-grid">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"My AC died at 11pm on a Saturday in July. Absolutely AC had a tech at my house in 90 minutes. Saved my sanity and my dog's."</p>
+      <div class="who">— Maria R., Coral Gables</div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"Replaced my entire system last spring. Bills dropped 30% and the house actually feels comfortable for the first time in years."</p>
+      <div class="who">— David L., Fort Lauderdale</div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"Friendly, fast, and didn't try to upsell me on stuff I didn't need. The dancing bear on their truck made my kids' day."</p>
+      <div class="who">— Jasmine T., Hialeah</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="cta">
+  <h2>Ready to Chill?</h2>
+  <a href="tel:5551234567" class="cta-phone">📞 (555) 123-COOL</a>
+  <p class="cta-note">Available 24/7 • Free Estimates • Licensed & Insured</p>
+</section>
+
+<footer>
+  <div class="logo">❄ Absolutely AC</div>
+  <p>© 2026 Absolutely AC Services. South Florida. License #CAC1234567.</p>
+</footer>
+
+<!-- Floating contact buttons (visible after scrolling past hero) -->
+<div class="floating-cta" id="floatingCta">
+  <a href="tel:5551234567" class="float-btn float-btn-call" aria-label="Call now">
+    <span class="float-icon">📞</span>
+    <span class="float-label">Call Now</span>
+  </a>
+  <a href="mailto:help@absolutelyacservices.com" class="float-btn float-btn-email" aria-label="Email us">
+    <span class="float-icon">✉️</span>
+    <span class="float-label">Email Us</span>
+  </a>
+  <a href="#contact" class="float-btn float-btn-book" aria-label="Book service">
+    <span class="float-icon">📅</span>
+    <span class="float-label">Book Service</span>
+  </a>
+</div>
+
+<script>
+  // Reveal the floating buttons once the user scrolls past the hero
+  (function() {
+    var cta = document.getElementById('floatingCta');
+    if (!cta) return;
+    function update() {
+      if (window.scrollY > 320) cta.classList.add('visible');
+      else cta.classList.remove('visible');
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script>
+
+</body>
+</html>
