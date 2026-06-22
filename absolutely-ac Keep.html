@@ -589,6 +589,12 @@
     letter-spacing: 1.5px;
     box-shadow: 5px 5px 0 var(--hot-pink);
   }
+  .lead-submit.is-disabled {
+    opacity: 0.55;
+  }
+  .lead-submit[aria-disabled="true"] {
+    cursor: not-allowed;
+  }
   .lead-status {
     margin-top: 0.9rem;
     font-size: 0.85rem;
@@ -741,12 +747,6 @@
       width: 54px;
       height: 54px;
       padding: 0;
-      justify-content: center;
-      border-radius: 50%;
-    }
-    .float-btn .float-label { display: none; }
-    .float-icon { font-size: 1.4rem; }
-  }
 </style>
 </head>
 <body>
@@ -985,7 +985,7 @@
 
   <div class="lead-form-wrap" id="quote-form">
     <p class="lead-form-title">Get a Quote</p>
-    <form id="leadForm">
+    <form id="leadForm" novalidate>
       <div class="lead-grid">
         <div class="lead-field">
           <label for="lead-name">Full Name</label>
@@ -1028,7 +1028,7 @@
 
 <footer>
   <div class="logo">❄ Absolutely AC</div>
-  <p>© 2026 Absolutely AC Services. Tampa Bay Area. License #CAC1234567.</p>
+  <p>© 2026 Absolutely AC Services. Tampa Bay Area. License #CAC1828298.</p>
 </footer>
 
 <!-- Floating contact buttons (visible after scrolling past hero) -->
@@ -1051,9 +1051,46 @@
   (function() {
     var GA4_MEASUREMENT_ID = 'G-XXXXXXXXXX';
     var ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/27861441/4bpi1nr/';
+    var visitorIp = 'unknown';
+    var ipResolved = false;
+    var TRACKING_VERSION = '2026-06-14';
 
     function canUseGa() {
       return /^G-[A-Z0-9]+$/i.test(GA4_MEASUREMENT_ID) && GA4_MEASUREMENT_ID !== 'G-XXXXXXXXXX';
+    }
+
+    function getSessionId() {
+      var key = 'aa_tracking_session_id';
+      var existing = window.sessionStorage.getItem(key);
+      if (existing) return existing;
+      var created = 's_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      window.sessionStorage.setItem(key, created);
+      return created;
+    }
+
+    function getAttribution() {
+      var params = new URLSearchParams(window.location.search || '');
+      return {
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        gclid: params.get('gclid') || '',
+        fbclid: params.get('fbclid') || ''
+      };
+    }
+
+    function buildBasePayload(extra) {
+      return Object.assign({
+        timestamp: new Date().toISOString(),
+        page: window.location.href,
+        page_path: window.location.pathname,
+        referrer: document.referrer || '',
+        user_agent: navigator.userAgent,
+        session_id: getSessionId(),
+        tracking_version: TRACKING_VERSION
+      }, getAttribution(), extra || {});
     }
 
     function initGa() {
@@ -1074,11 +1111,36 @@
       }
     }
 
+    function getVisitorIp(callback) {
+      if (ipResolved) {
+        callback(visitorIp);
+        return;
+      }
+
+      fetch('https://api.ipify.org?format=json')
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+          visitorIp = data && data.ip ? data.ip : 'unknown';
+          ipResolved = true;
+          callback(visitorIp);
+        })
+        .catch(function() {
+          visitorIp = 'unknown';
+          ipResolved = true;
+          callback(visitorIp);
+        });
+    }
+
     function sendZapierEvent(payload) {
-      var body = JSON.stringify(payload);
+      var body = new URLSearchParams();
+      Object.keys(payload).forEach(function(key) {
+        body.append(key, payload[key]);
+      });
+
       if (typeof navigator.sendBeacon === 'function') {
         try {
-          return navigator.sendBeacon(ZAPIER_WEBHOOK_URL, new Blob([body], { type: 'application/json' }));
+          navigator.sendBeacon(ZAPIER_WEBHOOK_URL, body);
+          return Promise.resolve({ ok: true });
         } catch (error) {
           // fall through to fetch
         }
@@ -1086,34 +1148,64 @@
 
       return fetch(ZAPIER_WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: body,
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: body.toString(),
         keepalive: true
       });
     }
 
+    function sendTrackedEvent(payload) {
+      return new Promise(function(resolve) {
+        getVisitorIp(function(ip) {
+          var enriched = buildBasePayload(Object.assign({}, payload, { ip: ip }));
+          sendZapierEvent(enriched)
+            .then(resolve)
+            .catch(resolve);
+        });
+      });
+    }
+
     function wireZapierClicks() {
-      var quoteLinks = document.querySelectorAll('a[data-track="cta_button_click"]');
-      quoteLinks.forEach(function(link) {
+      var callLinks = document.querySelectorAll('a[data-track="phone_call_click"]');
+      callLinks.forEach(function(link) {
         link.addEventListener('click', function() {
-          sendZapierEvent({
-            button: 'Get a Quote',
-            timestamp: new Date().toISOString(),
-            page: window.location.href
+          sendTrackedEvent({
+            event: 'phone_call_click',
+            button: 'Call Now',
+            location: link.getAttribute('data-location') || 'unknown'
           });
-          trackEvent('cta_button_click', { location: 'hero', label: 'Get a Quote' });
+          trackEvent('phone_call_click', {
+            location: link.getAttribute('data-location') || 'unknown',
+            label: (link.textContent || '').trim().slice(0, 80)
+          });
         });
       });
 
-      var phoneLinks = document.querySelectorAll('a[data-track="phone_call_click"]');
-      phoneLinks.forEach(function(link) {
+      var quoteLinks = document.querySelectorAll('a[data-track="cta_button_click"]');
+      quoteLinks.forEach(function(link) {
         link.addEventListener('click', function() {
-          sendZapierEvent({
-            button: 'PHONE NUMBER',
-            timestamp: new Date().toISOString(),
-            page: window.location.href
+          sendTrackedEvent({
+            event: 'cta_button_click',
+            button: 'Get a Quote',
+            location: link.getAttribute('data-location') || 'unknown'
           });
-          trackEvent('phone_call_click', {
+          trackEvent('cta_button_click', {
+            location: link.getAttribute('data-location') || 'unknown',
+            label: 'Get a Quote'
+          });
+        });
+      });
+
+      var emailLinks = document.querySelectorAll('a[data-track="email_click"]');
+      emailLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          sendTrackedEvent({
+            event: 'email_click',
+            button: 'Email Us',
+            location: link.getAttribute('data-location') || 'unknown'
+          });
+          trackEvent('email_click', {
             location: link.getAttribute('data-location') || 'unknown',
             label: (link.textContent || '').trim().slice(0, 80)
           });
@@ -1124,12 +1216,63 @@
     function wireLeadForm() {
       var form = document.getElementById('leadForm');
       var status = document.getElementById('leadStatus');
+      var submitButton = form ? form.querySelector('.lead-submit') : null;
+      var readyTracked = false;
+      var submitting = false;
+
       if (!form || !status) return;
 
-      form.addEventListener('submit', function(ev) {
-        ev.preventDefault();
+      function fieldHasValue(selector) {
+        var field = form.querySelector(selector);
+        if (!field) return false;
+        if (field.tagName === 'SELECT') {
+          return !!field.value && field.value !== '';
+        }
+        return !!String(field.value || '').trim();
+      }
+
+      function isValidZip(value) {
+        var digits = String(value || '').replace(/\D/g, '');
+        return digits.length >= 5;
+      }
+
+      function canSubmitForm() {
+        return fieldHasValue('#lead-name') &&
+          fieldHasValue('#lead-phone') &&
+          fieldHasValue('#lead-email') &&
+          fieldHasValue('#lead-service') &&
+          isValidZip((form.querySelector('#lead-zip') || {}).value);
+      }
+
+      function updateSubmitState() {
+        var isValid = canSubmitForm();
+        if (isValid && !readyTracked) {
+          readyTracked = true;
+          sendTrackedEvent({
+            event: 'quote_button_enabled',
+            button: 'Send Quote Request Enabled',
+            location: 'quote_form'
+          });
+          trackEvent('quote_button_enabled', {
+            page: window.location.href,
+            label: 'Send Quote Request'
+          });
+        }
+      }
+
+      function submitQuoteLead() {
+        if (submitting) return;
+
+        if (!canSubmitForm()) {
+          status.textContent = 'Please complete all required fields before sending.';
+          updateSubmitState();
+          return;
+        }
+
+        submitting = true;
         var data = new FormData(form);
         var payload = {
+          event: 'quote_form_submit',
           name: data.get('name'),
           phone: data.get('phone'),
           email: data.get('email'),
@@ -1137,29 +1280,44 @@
           zip: data.get('zip'),
           message: data.get('message'),
           source: 'website_form',
-          page: window.location.href,
-          submittedAt: new Date().toISOString()
+          location: 'quote_form'
         };
 
         status.textContent = 'Sending your request...';
-
-        var hasWebhook = ZAPIER_WEBHOOK_URL.indexOf('https://hooks.zapier.com/') === 0;
-        var sendPromise = hasWebhook
-          ? sendZapierEvent(payload)
-          : Promise.resolve({ ok: true });
-
-        sendPromise
-          .then(function(resp) {
-            if (resp && resp.ok === false) throw new Error('Request failed');
-            trackEvent('quote_form_submit', { service: String(payload.service || ''), zip: String(payload.zip || '') });
-            status.textContent = hasWebhook
-              ? 'Thanks! Your quote request has been sent.'
-              : 'Demo mode: add your Zapier webhook URL to send real leads.';
+        sendTrackedEvent(payload)
+          .then(function() {
+            trackEvent('quote_form_submit', {
+              service: String(payload.service || ''),
+              zip: String(payload.zip || '')
+            });
+            status.textContent = 'Thanks! Your quote request has been sent.';
             form.reset();
+            readyTracked = false;
+            window.setTimeout(updateSubmitState, 100);
           })
           .catch(function() {
             status.textContent = 'There was an issue sending your request. Please call (727) 475-0284.';
+          })
+          .finally(function() {
+            submitting = false;
           });
+      }
+
+      form.addEventListener('input', updateSubmitState);
+      form.addEventListener('change', updateSubmitState);
+      form.addEventListener('keyup', updateSubmitState);
+      window.setTimeout(updateSubmitState, 150);
+
+      if (submitButton) {
+        submitButton.addEventListener('click', function(ev) {
+          ev.preventDefault();
+          submitQuoteLead();
+        });
+      }
+
+      form.addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        submitQuoteLead();
       });
     }
 
@@ -1174,6 +1332,7 @@
       update();
     }
 
+    getVisitorIp(function() {});
     initGa();
     wireZapierClicks();
     wireLeadForm();

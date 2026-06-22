@@ -19,7 +19,7 @@ This checklist tracks what is already implemented and what is still needed befor
 
 - [ ] Replace placeholder GA4 Measurement ID in HTML (`G-XXXXXXXXXX`)
 - [ ] Replace placeholder Zapier webhook URL in HTML (`PASTE_ZAPIER_WEBHOOK_URL_HERE`)
-- [ ] Replace placeholder HVAC license number (`CAC1234567`)
+- [x] Replace placeholder HVAC license number (`CAC1828298`)
 - [ ] Confirm business street address (needed for LocalBusiness schema and Google Business Profile)
 - [ ] Verify all assets and links load correctly in production domain
 
